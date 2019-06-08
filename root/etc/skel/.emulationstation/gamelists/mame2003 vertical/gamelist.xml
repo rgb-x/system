@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<gameList>
+	<game>
+		<path>./argus.zip</path>
+		<name>argus</name>
+		<playcount>1</playcount>
+		<lastplayed>20190525T070549</lastplayed>
+	</game>
+	<game>
+		<path>./bombjack.zip</path>
+		<name>bombjack</name>
+		<playcount>1</playcount>
+		<lastplayed>20190525T072055</lastplayed>
+	</game>
+</gameList>

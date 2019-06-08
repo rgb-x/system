@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<gameList>
+	<game>
+		<path>./aliens.zip</path>
+		<name>aliens</name>
+		<playcount>2</playcount>
+		<lastplayed>20190525T073139</lastplayed>
+	</game>
+</gameList>

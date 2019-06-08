@@ -1,0 +1,130 @@
+#!/bin/sh
+sleep 4
+#Cogemos el puerto
+if [ ! -f ~/.config/configuracionPuerto.cfg ]; then
+	output="$(xrandr | grep " connected" | awk '{print$1}')"
+else
+	output=$(head -n 1 ~/.config/configuracionPuerto.cfg)
+fi
+
+if [ -e ~/.config/configuracionTarjeta.cfg ]; then
+  line=$(head -n 1 ~/.config/configuracionTarjeta.cfg)
+    case `echo "$line"` in
+    "$(echo $line | grep 'ATI')")
+	#xrandr --newmode "700x480_59.94" 13.129200 648 672 736 840 480 482 488 521 -HSync -VSync interlace
+	xrandr --newmode "700x480_59.94" 14.600 720 752 824 928 480 486 488 526 -hsync -vsync interlace
+	xrandr --addmode $output "700x480_59.94"
+	;;
+    "$(echo $line | grep 'NVIDIA. Experimental')")
+	xrandr --newmode "700x480_59.94" 26.181840 1280 1362 1429 1639 480 490 496 533 -hsync -vsync interlace
+	xrandr --addmode $output "700x480_59.94"
+	;;
+    "$(echo $line | grep 'INTEL. Experimental')")
+	xrandr --newmode "700x480_59.94" 28.654080 1400 1489 1563 1792 480 490 496 533 interlace -hsync -vsync
+	xrandr --addmode $output "700x480_59.94"
+	;;
+    *)
+	xrandr --newmode "700x480_59.94" 14.600 720 752 824 928 480 486 488 526 -hsync -vsync interlace
+	xrandr --addmode $output "700x480_59.94"	
+	;;
+    esac
+
+if [ ! -f ~/.config/configuracionMonitor.cfg ]; then
+	~/.config/Verticales.sh
+fi
+
+xrandr --output $output --mode "700x480_59.94"
+
+xrandr --newmode "240x240x60.00" 4.653 240 248 270 296 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "240x240x60.00"
+
+xrandr --newmode "256x224x60.00" 5.370 256 274 299 341 224 242 245 276 -hsync -vsync
+xrandr --addmode $output "256x224x60.00"
+
+xrandr --newmode "256x240x60.00" 4.905 256 264 287 312 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "256x240x60.00"
+
+xrandr --newmode "256x256x60.00" 5.200 256 264 288 320 256 257 260 275  -hsync -vsync
+xrandr --addmode $output "256x256x60.00"
+
+xrandr --newmode "256x264x60.00" 5.197 256 264 288 320 264 265 268 280  -hsync -vsync
+xrandr --addmode $output "256x264x60.00"
+
+xrandr --newmode "288x192x60.00" 6.115080  288 322 342 389  192 194 197 262 -hsync -vsync
+xrandr --addmode $output "288x192x60.00"
+
+xrandr --newmode "288x240x60.00" 5.533 288 296 322 352 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "288x240x60.00"
+
+xrandr --newmode "296x240x60.00" 5.785 296 304 331 368 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "296x240x60.00"
+
+xrandr --newmode "304x240x60.00" 5.911 304 312 340 376 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "304x240x60.00"
+
+xrandr --newmode "320x240x60.00" 6.791040  320 358 380 432  240 242 245 262 -hsync -vsync
+xrandr --addmode $output "320x240x60.00"
+
+xrandr --newmode "320x256x60.00" 6.501 320 328 359 400 256 257 260 275  -hsync -vsync
+xrandr --addmode $output "320x256x60.00"
+
+xrandr --newmode "336x240x60.00" 6.540 336 344 375 416 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "336x240x60.00"
+
+xrandr --newmode "352x256x60.00" 7.151 352 360 394 440 256 257 260 275  -hsync -vsync
+xrandr --addmode $output "352x256x60.00"
+
+xrandr --newmode "352x264x60.00" 7.146 352 360 394 440 264 265 268 280  -hsync -vsync
+xrandr --addmode $output "352x264x60.00"
+
+xrandr --newmode "352x288x60.00" 7.40 352 368 408 464 288 289 292 312  -hsync -vsync
+xrandr --addmode $output "352x288x60.00"
+
+xrandr --newmode "368x240x60.00" 7.168 368 376 410 456 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "368x240x60.00"
+
+xrandr --newmode "384x224x60.00" 8.1744 384 424 464 520 224 226 229 244 -hsync -vsync
+xrandr --addmode $output "384x224x60.00"
+
+xrandr --newmode "384x288x60.00" 7.410 384 392 427 472 288 291 294 314  -hsync -vsync
+xrandr --addmode $output "384x288x60.00"
+
+xrandr --newmode "392x240x60.00" 7.546 392 400 435 480 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "392x240x60.00"
+
+xrandr --newmode "400x256x60.00" 7.808 400 408 445 496 256 267 270 297  -hsync -vsync
+xrandr --addmode $output "400x256x60.00"
+
+xrandr --newmode "448x240x60.00" 8.677 448 456 497 552 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "448x240x60.00"
+
+xrandr --newmode "512x224x60.00" 10.485600  512 544 576 680  224 234 237 257 -hsync -vsync
+xrandr --addmode $output "512x224x60.00"
+
+xrandr --newmode "512x288x60.00" 9.922 512 520 567 632 288 291 294 314  -hsync -vsync
+xrandr --addmode $output "512x288x60.00"
+
+xrandr --newmode "632x264x57.00" 12.647 632 640 699 784 264 265 268 283 -hsync -vsync
+xrandr --addmode $output "632x264x57.00"
+
+xrandr --newmode "640x240x60.00" 12.324 640 648 706 784 240 241 244 262 -hsync -vsync
+xrandr --addmode $output "640x240x60.00"
+
+xrandr --newmode "640x288x60.00" 12.309 640 648 706 784 288 291 294 314  -hsync -vsync
+xrandr --addmode $output "640x288x60.00"
+
+xrandr --newmode "648x480x60.00" 13.129200 648 672 736 840  480 482 488 521 -hsync -vsync interlace
+xrandr --addmode $output "648x480x60.00"
+
+xrandr --newmode "720x576x50.00" 13.875 720 741 806 888 576 581 586 625  -hsync -vsync interlace
+xrandr --addmode $output "720x576x50.00"
+
+else
+	~/.config/ConfiguracionInicial.sh
+fi
+
+if [ -e ~/.config/configuracionMonitor.cfg ]; then
+	~/.config/IniciaRGB.sh
+else
+	~/.config/Verticales.sh
+fi

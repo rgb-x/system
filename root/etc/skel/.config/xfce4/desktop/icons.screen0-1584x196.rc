@@ -1,0 +1,19 @@
+[xfdesktop-version-4.10.3+-rcfile_format]
+4.10.3+=true
+
+[Disco Disquete]
+row=0
+col=1
+
+[Papelera]
+row=0
+col=0
+
+[/]
+row=0
+col=2
+
+[/home/arcade]
+row=0
+col=3
+

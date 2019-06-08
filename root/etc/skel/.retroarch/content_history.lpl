@@ -1,0 +1,325 @@
+{
+  "version": "1.0",
+  "items": [
+    {
+      "path": "/usr/local/games/roms/Dolphin/Arcade/Hudson Selection Vol.2 - Star Soldier (NTSC-J).gcz",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/dolphin_libretro.so",
+      "core_name": "dolphin-emu",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/Vertical/chopper.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/Vertical/champbwl.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/Vertical/cgraplop.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/Vertical/cflyball.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/Vertical/cfghtice.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/Vertical/cfarm.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/Vertical/centiped.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/Vertical/cbdash.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2010/Vertical/amazon.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2010_libretro.so",
+      "core_name": "MAME 2010",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2003/Vertical/bombjack.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2003_libretro.so",
+      "core_name": "MAME 2003 (0.78)",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Amstrad/roms/Abadia del Crimen, La (1988)(Opera Soft)(es).zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/crocods_libretro.so",
+      "core_name": "crocods",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/ZXSpectrum/roms/Abu Simbel Profanation (1985)(Dinamic Software)(es).z80",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/fuse_libretro.so",
+      "core_name": "fuse",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/PCECD/roms/Akumajou Dracula X - Chi no Rondo (Japan).chd",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mednafen_pce_fast_libretro.so",
+      "core_name": "Beetle PCE Fast",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/PCE/roms/Aero Blasters (USA).zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mednafen_pce_fast_libretro.so",
+      "core_name": "Beetle PCE Fast",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/PSX/Arcade/Asteroids 3d.PBP",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/pcsx_rearmed_libretro.so",
+      "core_name": "PCSX-ReARMed",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/PSX/roms/Bomberman Fantasy Race [NTSC-U].PBP",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/pcsx_rearmed_libretro.so",
+      "core_name": "PCSX-ReARMed",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Dolphin/roms/Hudson Selection Vol.4 - Adventure Island (NTSC-J).gcz",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/dolphin_libretro.so",
+      "core_name": "dolphin-emu",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/N64/roms/All Star Tennis '99 (USA).n64",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/parallel_n64_libretro.so",
+      "core_name": "ParaLLEl N64",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/fds/roms/Akumajou Dracula (Japan).zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/nestopia_libretro.so",
+      "core_name": "Nestopia",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/NES/roms/Adventures of Captain Comic, The (USA) (Unl).zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/nestopia_libretro.so",
+      "core_name": "Nestopia",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Dreamcast/Arcade/Capcom vs. SNK (USA).chd",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/reicast_libretro.so",
+      "core_name": "Reicast",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Dreamcast/roms/Jet Set Radio (Europe) (En,Fr,De,Es).chd",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/reicast_libretro.so",
+      "core_name": "Reicast",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Saturn/Arcade/Darius Gaiden (USA).chd",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mednafen_saturn_libretro.so",
+      "core_name": "Beetle Saturn",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Saturn/roms/Brain Dead 13 (USA).chd",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mednafen_saturn_libretro.so",
+      "core_name": "Beetle Saturn",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/32X/roms/After Burner (Japan, USA).zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/picodrive_libretro.so",
+      "core_name": "PicoDrive",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/MegaCD/roms/Amazing Spider-Man vs. The Kingpin, The (USA).chd",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/genesis_plus_gx_libretro.so",
+      "core_name": "Genesis Plus GX",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Megadrive/roms/Adventures of Batman & Robin, The (USA).zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/genesis_plus_gx_libretro.so",
+      "core_name": "Genesis Plus GX",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/GameGear/roms/Alien Syndrome (USA, Europe).zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/genesis_plus_gx_libretro.so",
+      "core_name": "Genesis Plus GX",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/MasterSystem/roms/Alex Kidd - High-Tech World (USA, Europe).zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/picodrive_libretro.so",
+      "core_name": "PicoDrive",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Atomiswave/roms/mslug6.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/reicast_libretro.so",
+      "core_name": "Reicast",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Naomi/roms/Border Down.lst",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/reicast_libretro.so",
+      "core_name": "Reicast",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/NeoGeoCD/neocdz/alpham2.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame206_libretro.so",
+      "core_name": "MAME",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/NeoGeo/roms/bangbead.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/fbalpha_libretro.so",
+      "core_name": "FB Alpha",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2016/roms/altbeast.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2010/roms/abcop.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2010_libretro.so",
+      "core_name": "MAME 2010",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2003/Vertical/argus.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2003_libretro.so",
+      "core_name": "MAME 2003 (0.78)",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/Mame2003/roms/4dwarrio.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/mame2003_libretro.so",
+      "core_name": "MAME 2003 (0.78)",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/FBA/Vertical/aerofgt.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/fbalpha_libretro.so",
+      "core_name": "FB Alpha",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/usr/local/games/roms/FBA/roms/64street.zip",
+      "label": "",
+      "core_path": "/home/arcade/.retroarch/cores/fbalpha_libretro.so",
+      "core_name": "FB Alpha",
+      "crc32": "",
+      "db_name": ""
+    }
+  ]
+}
