@@ -1,5 +1,5 @@
 #Sirmagb probando a modificar un arhivo, la primera linea no tenerla en cuenta#
-Prueba de modificacion de archivo
+Prueba de modificacion de archivo.
 lvl2: 	EmulationStation - v2.9.0rp-dev, built Feb 22 2019 - 17:41:56
 lvl2: 	Parsing XML file "/home/arcade/EmulationStation/resources/mamenames.xml"...
 lvl2: 	Parsing XML file "/home/arcade/EmulationStation/resources/mamebioses.xml"...
