@@ -76,14 +76,14 @@ except:
 with open(__file__,"w") as f:
     f.write(contents)
 
-if not ini_set(UPDATER_CFG, "updater_ver", version):
+if not ini_set(UPDATER_CFG, updater_ver, version):
     show_info("error writing version (%s)" % version)
     pygame.time.delay(2000)
     exit(0)
  
 show_info("Process finished updated to: %s" % version)
 pygame.time.delay(2000)
-ch.cleanup()
+CH.cleanup()
 exit(0)
 
 
