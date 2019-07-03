@@ -76,7 +76,7 @@ except:
 with open(__file__,"w") as f:
     f.write(contents)
 
-if not ini_set(UPDATER_CFG, updater_ver, version):
+if not ini_set(UPDATER_CFG, "updater_ver", version):
     show_info("error writing version (%s)" % version)
     pygame.time.delay(2000)
     exit(0)
