@@ -24,7 +24,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys, urllib2
 import os, logging, subprocess
 
-sys.path.append('/opt/RGBux/python')
+sys.path.append('/opt/RGBux/bin/python')
 
 from core.core_paths import CFG_PATH
 from core.core_choices_dynamic import choices, pygame
