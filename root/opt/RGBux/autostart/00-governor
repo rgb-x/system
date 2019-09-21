@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# escribid los scripts para que los tabuladores los convierta en 4 espacios.
+
+# inicializaciones de paths, imprescindibles
+. /opt/RGBux/bin/system-base
+. $RG_ETC_PATH/system.conf
+
+echo "$GOVERNOR" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# coge variables CORE, CFGS y PATHs
+. /opt/RGBux/bin/switchres-init
+
+# vars, funcs in setup-env loaded on profile
+. /opt/RGBux/bin/system-base
+
+amixer -q -c 0 sset Master 12dB+ unmet no cap
+echo "volume changed +12dB..."
+
+# FIX gm crashed
+recover_gm() {
+    amixer -q -c 0 sset Master 12dB- unmet no cap
+    echo "volume restored -12dB..."
+
+    . /opt/RGBux/bin/switchres-restore
+}
+
+### NEOGEO BIOS CODE
+
+# como hemos podido variar la variable de entorno pero sin reiniciar, 
+# machacamos el env actual volviendo a leer CFG_SYSTEM
+. $CFG_SYSTEM
+
+ISNEOGEO=`echo "$@" |grep neogeo`
+if [ "$ISNEOGEO" != "" ]; then
+    echo -n "NEOGEO bios: "
+    if [[ -v NEOGEO_BIOS ]]; then
+        if [ "$NEOGEO_BIOS" != "euro" ]; then
+            echo "$NEOGEO_BIOS"
+            PARAM_NEOGEO="-bios $NEOGEO_BIOS"
+        else
+            echo "default (euro)"
+        fi
+    else
+        echo "not configured"
+    fi
+fi
+

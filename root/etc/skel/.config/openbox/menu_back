@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openbox_menu xmlns="http://openbox.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://openbox.org/                 file:///usr/share/openbox/menu.xsd">
+	<menu id="root-menu" label="Openbox 3">
+		<item label="Terminal emulator">
+			<action name="Execute">
+				<execute>x-terminal-emulator</execute>
+			</action>
+		</item>
+		<item label="Web browser">
+			<action name="Execute">
+				<execute>x-www-browser</execute>
+			</action>
+		</item>
+		<!-- This requires the presence of the 'openbox-menu' package to work -->
+		<menu id="/Debian"/>
+		<separator/>
+		<menu id="root-menu-282633" label="RGBuntu">
+			<item label="EmulationStation">
+				<action name="Execute">
+					<execute>/home/arcade/EmulationStation/emulationstation</execute>
+				</action>
+			</item>
+			<item label="RetroArch">
+				<action name="Execute">
+					<execute>retroarch</execute>
+				</action>
+			</item>
+			<item label="Kodi">
+				<action name="Execute">
+					<execute>kodi</execute>
+				</action>
+			</item>
+			<item label="Joystick">
+				<action name="Execute">
+					<execute>jstest-gtk</execute>
+				</action>
+			</item>
+		</menu>
+		<menu id="root-menu-622546" label="Aplicaciones">
+			<item label="Navegador web">
+				<action name="Execute">
+					<execute>firefox</execute>
+				</action>
+			</item>
+			<item label="Terminal Sakura">
+				<action name="Execute">
+					<execute>sakura</execute>
+				</action>
+			</item>
+			<item label="Explorador ficheros">
+				<action name="Execute">
+					<execute>pcmanfm</execute>
+				</action>
+			</item>
+			<item label="Editar menú">
+				<action name="Execute">
+					<execute>obmenu</execute>
+				</action>
+			</item>
+			<item label="Editor texto">
+				<action name="Execute">
+					<execute>mousepad</execute>
+				</action>
+			</item>
+			<item label="Instalación y copia">
+				<action name="Execute">
+					<execute>/usr/lib/systemback/sbsustart systemback</execute>
+				</action>
+			</item>
+		</menu>
+		<menu execute="/usr/bin/obamenu" id="applications-menu" label="Applications"/>
+		<separator/>
+		<item label="ObConf">
+			<action name="Execute">
+				<execute>obconf</execute>
+			</action>
+		</item>
+		<item label="Reconfigure">
+			<action name="Reconfigure"/>
+		</item>
+		<separator/>
+		<item label="Apagar">
+			<action name="Execute">
+				<execute>shutdown now</execute>
+			</action>
+		</item>
+		<item label="Reiniciar">
+			<action name="Execute">
+				<execute>reboot</execute>
+			</action>
+		</item>
+		<item label="Salir">
+			<action name="Exit"/>
+		</item>
+	</menu>
+</openbox_menu>

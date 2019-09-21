@@ -1,0 +1,15 @@
+# ifupdown has been replaced by netplan(5) on this system.  See
+# /etc/netplan for current configuration.
+# To re-enable ifupdown on this system, you can run:
+#    sudo apt install ifupdown
+# examples:
+#
+# auto eth0
+# iface eth0 inet static
+#         address 10.0.0.1
+#         netmask 255.255.255.0
+# auto eth0
+# iface eth0 inet dhcp
+
+auto lo
+iface lo inet loopback

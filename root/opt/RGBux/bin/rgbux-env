@@ -1,0 +1,78 @@
+#!/bin/bash
+
+###############################################
+### GET CONFIG
+
+. /opt/RGBux/bin/system-base
+
+###############################################
+### GET SYSTEM VARS
+###   ORIENTATION, MONITOR, DEVICE, USERNAME
+###   CONNECTOR_DRM, CONNECTOR_X11
+
+. $RG_ETC_PATH/system.conf
+
+export ORIENTATION
+export MONITOR
+export DEVICE
+export USERNAME
+export CONNECTOR_DRM
+export CONNECTOR_X11
+
+################################################
+### FUNCTIONS
+
+. /opt/RGBux/bin/rgbux-helpers
+
+LOGFILE=/tmp/init-env.log
+
+################################################
+### SETUP CODE 
+
+IS31KHZ=`cat /proc/cmdline |grep noxconf`
+if [ "$IS31KHZ" == "" ]; then
+    export IS31KHZ=false
+else
+    export IS31KHZ=true
+fi
+
+ISLIVE=`cat /proc/cmdline |grep casper`
+if [ "$ISLIVE" == "" ]; then
+    export ISLIVE=false
+else
+    export ISLIVE=true
+fi
+
+ISARCADE=`cat /proc/cmdline |grep video`
+if [ "$ISARCADE" == "" ]; then
+    export ISARCADE=false
+else
+    export ISARCADE=true
+fi
+
+# GET SYSTEM PORTS - WE USE DRM-KERNEL NAME
+PORTS_DRM=""
+for PT in $VIDEO_PORT_PATH/$VIDEO_CARD_NAME-*; do
+    DRM_PT="${PT/#$VIDEO_PORT_PATH\/$VIDEO_CARD_NAME-/}"
+    PORTS_DRM="$PORTS_DRM|$DRM_PT"
+    # print_log "[rgbux-env] DRM: $DRM_PT"
+
+    # GET CURRENT PORT
+    CHECK=`cat /proc/cmdline |grep $DRM_PT`
+    if [ -n "$CHECK" ]; then
+        # print_log "CMD PORT FOUND! $DRM_PT"
+        if [ "$CONNECTOR_DRM" != "$DRM_PT" ]; then
+             print_log "WARNING: WRONG $DRM_PT PORT? (SYSTEM CFG $CONNECTOR_DRM)"
+             set_port_drm $DRM_PT
+             export CONNECTOR_DRM=$DRM_PT
+        fi
+        export PORT_SELECTED_DRM="$DRM_PT"
+    fi
+done
+export PORTS_DRM=${PORTS_DRM: 1}
+# print_log $PORTS_DRM $PORT_SELECTED_DRM
+
+# X11 RUNNING CURRENT CONNECTED MONITOR - UNUSED
+# PORT_CONNECTED_X11="$(xrandr | grep " connected" | awk '{print$1}')"
+
+# OTHER EXPORTS

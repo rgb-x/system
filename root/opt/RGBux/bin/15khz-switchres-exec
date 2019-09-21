@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# Switch to the given resolution using a 15khz 
+# modeline (computed using the original switchres 
+# tool made by Calamity), execute the given command,
+# then revert back to the original resolution
+
+# vars, funcs in setup-env loaded on profile
+# load script paths
+. /opt/RGBux/bin/system-base
+
+set -e
+
+width=$1
+height=$2
+frequency=$3
+
+if (( $# < 3 )) || [[ -z "$CONNECTOR_X11" ]]; then
+    echo "Usage: 15khz-switchres-exec <with> <height> <frequency> <command>"
+    echo
+    echo "Note: the env var MONITOR set for '${MONITOR}'"
+    echo
+    exit -1
+fi
+
+# Compute modeline for the given resolution
+
+modeline=$($SWITCHRES_BIN \
+    --calc \
+    --monitor $MONITOR \
+    $width $height $frequency \
+    | tail -n1 \
+    | sed -e 's/ModeLine //' \
+    | sed -e 's/"//g')
+modename=$(echo $modeline | cut -d" " -f1)
+
+echo "INFO: Computed modeline $modeline"
+
+# Apply modeline with xrandr
+
+xrandr --newmode $modeline
+xrandr --addmode $CONNECTOR_X11 $modename
+
+sleep 1
+
+xrandr --output $CONNECTOR_X11 --mode $modename
+
+revertoriginalresolution() {
+    . /opt/RGBux/bin/switchres-restore
+}
+
+trap 'revertoriginalresolution; exit 0' EXIT
+
+# Execute command
+
+set +e
+
+shift 3
+
+"$@"

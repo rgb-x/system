@@ -1,0 +1,92 @@
+#!/bin/bash
+
+### convert DRM port to X11 port (Ex: DVI-I-1 => DVI-0)
+# $1 PORTNAME, $2 SUM (true)
+function x11_convert()
+{
+    local PNAME=`echo $1 | sed -n "s/\(\w*\).*/\1/p"`
+    if [ -z $2 ]; then 
+        (( PNUMB=${1: -1}-1  ))
+    else
+        (( PNUMB=${1: -1}+1  ))
+    fi
+    echo "$PNAME-$PNUMB"
+}
+
+function x11_getdrm()
+{
+    PT_DRM=$1
+    PT_X11=""
+    for PT in $PORTS_ARRAY; do
+        CHECK=`echo "$PT" |grep $PT_DRM`
+        if [ -n "$CHECK" ]; then
+            echo "${PT/#$PT_DRM=/}"
+        fi
+    done
+}
+
+
+### change conf value: TARGET_KEY=REPLACEMENT_VALUE in file CONFIG_FILE.
+# call using: replace_value TARGET_KEY REPLACEMENT_VALUE CONFIG_FILE
+# $1 => TARGET_KEY, $2 => REPLACEMENT_VALUE, $3 => CONFIG_FILE
+#
+function replace_value()
+{
+    sudo sed -i "s/\($1 *= *\).*/\1$2/" $3
+}
+
+
+### add conf value: TEXT in file CONFIG_FILE.
+# call using: replace_value TEXT CONFIG_FILE
+# $1 => TEXT, $2 => CONFIG_FILE
+#
+function add_value()
+{
+    sudo sh -c "echo '$1' >> $2"
+}
+
+
+### change mame ini file: TARGET_KEY NEW_VALUE in file MAME_INI.
+# call using TARGET_KEY NEW_VALUE MAME_INI
+# $1 => TARGET_KEY, $2 => NEW_VALUE, $3 => MAME_INI
+function replace_mame()
+{
+    sudo sed -i "s/^$1 .*$/$1        $2/" $3
+}
+
+
+### get conf value: TARGET_KEY=VALUE in file CONFIG_FILE.
+# call using: get_value TARGET_KEY CONFIG_FILE
+# $1 => TARGET_KEY, $2 => CONFIG_FILE and return VALUE
+#
+function get_mame()
+{
+    KEY=$1
+    CFILE=$2
+
+    # get value from file
+    local value=$(sed -n "s/\($KEY *\)\(.*\)/\2/p" $CFILE)
+    # return value
+    echo "$value"
+}
+
+
+### get conf value: TARGET_KEY=VALUE in file CONFIG_FILE.
+# call using: get_value TARGET_KEY CONFIG_FILE
+# $1 => TARGET_KEY, $2 => CONFIG_FILE and return VALUE
+#
+function get_value()
+{
+    KEY=$1
+    CFILE=$2
+
+    # get value from file
+    local value=$(sed -n "s/\($KEY *= *\)\(.*\)/\2/p" $CFILE)
+    # remove " from string
+    value="${value%\"}"
+    value="${value#\"}"
+
+    # return value
+    echo "$value"
+}
+

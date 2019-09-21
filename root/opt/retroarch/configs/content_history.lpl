@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "items": [
+    {
+      "path": "/home/arcade/roms/Megadrive/roms/Sonic The Hedgehog (USA, Europe).zip",
+      "label": "",
+      "core_path": "/opt/retroarch/cores/genesis_plus_gx_libretro.so",
+      "core_name": "Genesis Plus GX",
+      "crc32": "",
+      "db_name": ""
+    }
+  ]
+}

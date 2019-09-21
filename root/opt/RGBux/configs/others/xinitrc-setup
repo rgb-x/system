@@ -1,0 +1,3 @@
+export PATH=/usr/local/bin:/usr/games/bin:/usr/games:$PATH
+# exec xterm
+exec xterm -fg Snow1 -bg Grey20 -geom 106x37 -e "/opt/RGBux/bin/rgbux-setup"

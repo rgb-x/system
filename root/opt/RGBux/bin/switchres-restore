@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# paths, funcs in setup-env/base-system.conf loaded on profile
+. /opt/RGBux/bin/system-base
+
+
+# restore desktop video using conector var
+xrandr --output $CONNECTOR_X11 --mode "$VIDEO_DESKTOP_NAME"
+
+if [[ $ORIENTATION == "Vertical. Izquierda" ]]; then
+    xrandr -o left
+fi
+if [[ $ORIENTATION == "Vertical. Derecha" ]]; then
+    xrandr -o right
+fi
+
+xrandr --delmode $CONNECTOR_X11 "$modename"
+xrandr --rmmode "$modename"
+
+sleep 1

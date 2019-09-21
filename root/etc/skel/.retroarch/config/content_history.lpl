@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "items": [
+    {
+      "path": "/home/arcade/roms/Mame2016/roms/3wonders.zip",
+      "label": "",
+      "core_path": "/home/arcade/.config/retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/home/arcade/roms/Mame2016/roms/bublbobl.zip",
+      "label": "",
+      "core_path": "/home/arcade/.config/retroarch/cores/mame2016_libretro.so",
+      "core_name": "MAME 2016",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/home/arcade/roms/PSX/roms/Chippoke Ralph no Daibouken (Adventure of Little Ralph) (NTSC).PBP",
+      "label": "",
+      "core_path": "/home/arcade/.config/retroarch/cores/pcsx_rearmed_libretro.so",
+      "core_name": "PCSX-ReARMed",
+      "crc32": "",
+      "db_name": ""
+    },
+    {
+      "path": "/home/arcade/roms/PSX/roms/Raiden_Project_USA.PBP",
+      "label": "",
+      "core_path": "/home/arcade/.config/retroarch/cores/pcsx_rearmed_libretro.so",
+      "core_name": "PCSX-ReARMed",
+      "crc32": "",
+      "db_name": ""
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+#!/bin/sh
+'feh' '--bg-center' '/opt/RGBux/data/loading.png'

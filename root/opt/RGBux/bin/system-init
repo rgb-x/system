@@ -1,0 +1,114 @@
+#!/bin/bash
+
+###############################################
+### GEN ENV CONFIG
+. /opt/RGBux/bin/rgbux-env
+
+###############################################
+### INTERNAL CONFIGURATION
+VER=0.1
+LOGFILE=/tmp/init-sys
+
+# BOOTS
+# su -l $USERNAME -c startx
+# sudo -i -u $USERNAME startx
+# sudo -u $USERNAME -s -H xinit
+# sudo -u $USERNAME -H xinit
+
+function limpia ()
+{
+    clear
+    echo
+    echo
+    rm -rf /home/$USERNAME/.xinitrc &> /dev/null
+    print_log $1
+    echo
+    echo
+}
+
+function check_connector()
+{
+    if [ -z "$CONNECTOR_X11" ]; then
+        while true; do
+            . /opt/RGBux/bin/system-xfinder
+            if [ -z "$PORT_SELECTED_X11" ]; then
+                read -p "    X11 port NOT FOUND! Press enter to restart test or reboot and change your default port."
+            else
+                print_log "INIT SET: $PORT_SELECTED_X11 $PORT_SELECTED_DRM"
+                set_port $PORT_SELECTED_X11 $PORT_SELECTED_DRM
+                # reload it, because is changed...
+                . $CFG_SYSTEM
+                break
+            fi
+        done
+    fi
+}
+
+function init_fe ()
+{
+    limpia "    FRONTEND!"
+    cp /opt/RGBux/configs/others/xinitrc-fe /home/$USERNAME/.xinitrc
+    sudo -i -u $USERNAME xinit -- -nocursor 2> /tmp/xorg-init.log
+}
+
+function init_desktop ()
+{
+    limpia "    DESKTOP!"
+    if [ "$IS31KHZ" = true ]; then
+        cp /opt/RGBux/configs/applications/install-system.desktop /home/$USERNAME/Escritorio/
+        cp /opt/RGBux/configs/applications/poweroff-system.desktop /home/$USERNAME/Escritorio/
+    fi
+    sudo -i -u $USERNAME startx
+}
+
+function init_game()
+{
+    if [ -e $BOOT_GAME_CFG ]; then
+        limpia "    GAME!"
+        if [ ! -f $BOOT_GAME_FLG ]; then
+           touch $BOOT_GAME_FLG
+           cp /opt/RGBux/configs/others/xinitrc-game /home/$USERNAME/.xinitrc
+           sudo -i -u $USERNAME xinit -- -nocursor
+        fi
+    fi
+}
+
+function first_boot()
+{
+    print_log "INIT SET: $CONNECTOR_DRM"
+    set_port_drm $CONNECTOR_DRM
+    sudo update-grub
+}
+
+function wait()
+{
+    echo
+    read -p "      Waiting for... ($1)!??" menuop
+}
+
+cd /home/$USERNAME
+
+#if [ "$FIRSTBOOT" = true ]; then
+#    wait "pre_boot"
+#    first_boot
+#    wait "first_boot"
+#fi
+
+
+if [ "$ISLIVE" = true ]; then
+    print_log "IS LIVE!"
+fi
+
+if [ "$IS31KHZ" = false ]; then
+    check_connector
+fi
+
+if [ "$ISARCADE" = true ]; then
+    init_game
+    init_fe
+fi
+
+init_desktop
+
+# wait "PRESS ENTER"
+

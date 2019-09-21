@@ -1,9 +1,33 @@
 <?xml version="1.0"?>
 <gameList>
 	<game>
-		<path>./aliens.zip</path>
-		<name>aliens</name>
-		<playcount>2</playcount>
-		<lastplayed>20190525T073139</lastplayed>
+		<path>./ghouls.zip</path>
+		<name>ghouls</name>
+		<playcount>1</playcount>
+		<lastplayed>20190614T135252</lastplayed>
+	</game>
+	<game>
+		<path>./tigeroad.zip</path>
+		<name>tigeroad</name>
+		<playcount>1</playcount>
+		<lastplayed>20190614T135304</lastplayed>
+	</game>
+	<game>
+		<path>./blktiger.zip</path>
+		<name>blktiger</name>
+		<playcount>3</playcount>
+		<lastplayed>20190614T140712</lastplayed>
+	</game>
+	<game>
+		<path>./trojan.zip</path>
+		<name>trojan</name>
+		<playcount>3</playcount>
+		<lastplayed>20190614T141537</lastplayed>
+	</game>
+	<game>
+		<path>./robby.zip</path>
+		<name>robby</name>
+		<playcount>1</playcount>
+		<lastplayed>20190617T123603</lastplayed>
 	</game>
 </gameList>

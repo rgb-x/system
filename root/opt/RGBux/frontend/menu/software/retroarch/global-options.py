@@ -1,0 +1,1 @@
+/opt/RGBux/bin/python/autocfg.py

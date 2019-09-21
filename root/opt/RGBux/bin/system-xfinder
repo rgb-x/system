@@ -1,0 +1,48 @@
+#!/bin/bash
+# call it from system-init if not found PORT_SELECTED_X11 on boot
+
+# vars, funcs in setup-env loaded on profile
+. /opt/RGBux/bin/system-base
+
+if [ -z "$PORT_SELECTED_DRM" ]; then
+    echo "imposible setup, DRM PORT not found..."
+    exit 1
+fi
+
+TMP_FLAGFILE="/tmp/xfinder-found"
+PNAME=`echo $PORT_SELECTED_DRM | sed -n "s/\(\w*\).*/\1/p"`
+print_log "BASE PORT: $PORT_SELECTED_DRM => $PNAME ($USERNAME)"
+
+ARRAY_PORTS="0 1 2 3"
+STR_BASE="\"monitor-RGB\" \"CRT\""
+for PT in $ARRAY_PORTS; do
+    export TEST_PORT="$PNAME-$PT"
+    limpia "    XFINDER: $TEST_PORT!"
+    # prepare X11 env
+    cp -v "/opt/RGBux/configs/xorg/xorg_disabled.conf" /etc/X11/xorg.conf >> /tmp/xfinder.log
+    sed -i "s/\"monitor-${TEST_PORT}\" \"Disabled\"/\"monitor-${TEST_PORT}\" \"CRT\"/" /etc/X11/xorg.conf
+    echo "TEST_PORT=$TEST_PORT" > /home/$USERNAME/.xinitrc
+    cat /opt/RGBux/configs/others/xinitrc-xfinder >> /home/$USERNAME/.xinitrc
+    # init configured X11
+    echo "Now we try to find your cart port configuration, with your help"
+    echo "I try to check your screen show you an image, if you see it correctly."
+    echo "Enter the numbers!!"
+    echo
+    echo "     XFINDER CHECK_PORT: $TEST_PORT. Press enter to start the test."
+    read -p "."
+    echo "init test, please wait..."
+    sudo -i -u $USERNAME xinit 2> /dev/null
+
+    # check if test finished: OK!
+    if [ -e $TMP_FLAGFILE ]; then
+        sudo rm -vf $TMP_FLAGFILE &>> $LOGFILE
+        print_log "FOUND: $TEST_PORT => $CONNECTOR_X11_NAME ($CFG_SYSTEM)"
+        replace_value $CONNECTOR_X11_NAME $TEST_PORT $CFG_SYSTEM
+        export PORT_SELECTED_X11=$TEST_PORT
+        break
+    else
+        read -p "     XFINDER: $TEST_PORT Not found? Press enter to continue..."
+    fi
+done
+
+

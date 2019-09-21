@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# coge las variables del entorno ya generadas por laucher-init
+
+print_log "SAVES: $USER_SAVE_PATH/$SYSTEM/"
+
+# creamos el directorio si no existe
+mkdir -vp $USER_SAVE_PATH/$SYSTEM 2> /dev/null
+
+# esta es la variable para el launcher
+PARAM_SAVE="$USER_SAVE_PATH/$SYSTEM/"
+
+# falta codigo, cuando no quieras saves

@@ -1,0 +1,93 @@
+#!/bin/bash
+
+if [ ! "$1" ];then
+	echo -e "usage : $0 [command] [args]\nWith command in\n\tconfig [enable|disable] ssid key\n\tlist"
+	exit 1
+fi
+
+command="$1"
+mode="$2"
+ssid="$3"
+psk="$4"
+
+wlan="wl`ifconfig -a | sed -n \"s/wl\(\w*\).*/\1/p\"`"
+wpafile=/etc/wpa_supplicant.conf
+ifacefile=/etc/network/interfaces
+log=/tmp/wifi.log
+
+rgb_wifi_wait() {
+  DEVICE=$1
+  TIMEOUT=$2
+
+  N=0
+  while test $N -lt $TIMEOUT
+  do
+    wpa_cli -i"$DEVICE" status  2> /dev/null | grep -qE '^wpa_state=COMPLETED$' && return 0
+    sleep 1
+    let N++
+  done
+  echo "`logtime` : wifi timeout" >> $log
+  return 1
+}
+
+if [[ "$command" == "list" ]]; then
+    echo "`logtime` : list $wlan" >> $log
+    ifconfig $wlan up &> /dev/null
+    iw dev $wlan scan | egrep "signal|SSID" | sed -e "s/\tsignal: //" -e "s/\tSSID: //" | awk '{ORS = (NR % 2 == 0)? "\n" : " "; print}' | sort
+fi
+
+if [[ "$command" == "config" ]]; then
+    if [[ "$mode" == "enable" ]]; then
+        echo "`logtime` : enable wifi ($wlan)" >> $log
+        if grep -Fxq "# RGBux WIFICFG" $ifacefile; then
+            echo ""
+        else
+            echo -e "\n# RGBux WIFICFG\nauto wlan9\niface wlan9 inet dhcp\nwpa-conf $wpafile\n" >> $ifacefile
+        fi
+        sed -i "s/wl\w\+/$wlan/g" $ifacefile
+        echo "`logtime` : creating network entry in $wpafile ($ssid)" >> $log
+        echo -e "network={\n\tssid=\"$ssid\"\n\tpsk=\"$psk\"\n}" > $wpafile
+        #encpsk=`wpa_passphrase $ssid $psk | grep -v "#psk=\"" | grep "psk=" | sed -e "s/\tpsk=//"`
+        #sed -i "s/ssid=\".*\"/ssid=\"`echo $ssid | sed -e 's/[\/&]/\\\\&/g'`\"/g" $wpafile
+        #sed -i "s/psk=\".*\"/psk=\"`echo $psk | sed -e 's/[\/&]/\\\\&/g'`\"/g" $wpafile
+        mode="restart"
+    fi
+
+
+
+    if [[ "$mode" =~ "start" ]]; then
+        echo "`logtime` : starting wifi ($wlan) [$mode]" >> $log
+        killall wpa_supplicant &> /dev/null
+        killall dhclient &> /dev/null
+        ifdown $wlan &> /dev/null
+        ifup $wlan &>> $log &
+        rgb_wifi_wait $wlan 20
+        if [ "$?" != "0" ]; then
+            nerror=$?
+            echo "error, not connected. bad password?"
+            echo "`logtime` : not connected wifi ($wlan)" >> $log
+            exit $nerror
+        else
+            command="ip"
+        fi
+    fi
+
+    if [[ "$mode" == "disable" ]]; then
+        echo "`logtime` : disabling ($wlan)" >> $log
+        sed -i "s/ssid=\".*\"/ssid=\"\"/g" $wpafile
+        sed -i "s/psk=\".*\"/psk=\"\"/g" $wpafile
+        killall wpa_supplicant &>> $log
+        killall dhclient &>> $log
+        ifdown $wlan &> /dev/null
+        exit $?
+    fi
+
+fi
+
+if [[ "$command" == "ip" ]]; then
+    echo "`logtime` : ip $wlan" >> $log
+    ifconfig $wlan up &> /dev/null
+    wip=`ifconfig $wlan | grep "netmask" | awk '{print $2}'`
+    echo "wifi: $wip"
+    echo "`logtime` : inet $wip" >> $log
+fi

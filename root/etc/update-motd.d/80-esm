@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. /etc/RGBux/system.conf
+
+cat <<EOF
+
+System configured to use a 15Khz CRT on ${CONNECTOR_DRM}. Feel the feeling!
+EOF
+echo

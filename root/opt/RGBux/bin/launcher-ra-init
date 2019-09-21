@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# vars, funcs in setup-env loaded on profile
+. /opt/RGBux/bin/system-base
+
+test -f $LOGFILE && sudo rm -v $LOGFILE
+
+# main config
+PARAM_CONFIG="-c $RG_RA_CFG_GLOBAL"
+CORE=$2
+GAME=$3
+
+function get_core {
+    CORE="${CORE/#$RG_RA_CORES\//}"
+    CFG_CORE="${CORE%.so}.cfg"
+}
+
+function get_system {
+    SYSTEM=$(basename $(dirname $(dirname "${GAME}")))
+    CFG_SYSTEM="${SYSTEM}.cfg"
+    CFG_SYSTEM50="${SYSTEM}_50.cfg"
+}
+
+function set_config {
+    PARAM_CONFIG="-c $1"
+    print_log "SPECIAL CFG LOADED: $1"
+}
+
+restore_video() {
+    . /opt/RGBux/bin/switchres-restore
+}
+
+# modename to delete
+modename="700x480_59.94"
+
+get_core
+get_system
+# TODO: get_region using $CFG_SYSTEM50
+
+print_log "USED $0"
+print_log "CORE: $CORE"
+print_log "SYSTEM: $SYSTEM"
+
+# Check configs
+if [ -f $RG_RA_CFG_CORES/$CFG_SYSTEM ]; then
+    set_config "$RG_RA_CFG_CORES/$CFG_SYSTEM"
+elif [ -f $RG_RA_CFG_CORES/$CFG_CORE ]; then
+    set_config "$RG_RA_CFG_CORES/$CFG_CORE"
+fi

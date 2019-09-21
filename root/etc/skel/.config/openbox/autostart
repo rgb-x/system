@@ -1,0 +1,52 @@
+#!/bin/sh
+
+exit 0
+
+#Cogemos el puerto
+if [ ! -f ~/.config/configuracionPuerto.cfg ]; then
+	output="$(xrandr | grep " connected" | awk '{print$1}')"
+else
+	output=$(head -n 1 ~/.config/configuracionPuerto.cfg)
+fi
+
+
+if [ -e ".config/configuracionTarjeta.cfg" ]; then
+  line=$(head -n 1 ~/.config/configuracionTarjeta.cfg)
+    case `echo "$line"` in
+    "$(echo $line | grep 'ATI')")
+	xrandr --newmode "700x480_59.94" 14.600 720 752 824 928 480 486 488 526 -hsync -vsync interlace
+	xrandr --addmode $output "700x480_59.94"
+	;;
+    "$(echo $line | grep 'NVIDIA. Experimental')")
+	xrandr --newmode "700x480_59.94" 26.181840 1280 1362 1429 1639 480 490 496 533 -hsync -vsync interlace
+	xrandr --addmode $output "700x480_59.94"
+	;;
+    "$(echo $line | grep 'INTEL. Experimental')")
+	xrandr --newmode "700x480_59.94" 28.654080 1400 1489 1563 1792 480 490 496 533 interlace -hsync -vsync
+	xrandr --addmode $output "700x480_59.94"
+	;;
+    *)
+	xrandr --newmode "700x480_59.94" 14.600 720 752 824 928 480 486 488 526 -hsync -vsync interlace
+	xrandr --addmode $output "700x480_59.94"	
+	;;
+    esac
+
+xrandr --output $output --mode "700x480_59.94"
+
+xrandr --newmode "320x240x60.00" 6.791040  320 358 380 432  240 242 245 262 -hsync -vsync
+xrandr --addmode $output "320x240x60.00"
+
+xrandr --newmode "336x240x60.00" 6.540 336 344 375 416 240 241 244 262  -hsync -vsync
+xrandr --addmode $output "336x240x60.00"
+
+xrandr --newmode "352x288x60.00" 7.40 352 368 408 464 288 289 292 312  -hsync -vsync
+xrandr --addmode $output "352x288x60.00"
+
+
+fi
+
+if [ -e ".config/configuracionMonitor.cfg" ]; then
+  ~/.config/IniciaRGBuntu.sh
+else
+  ~/.config/Verticales.sh
+fi

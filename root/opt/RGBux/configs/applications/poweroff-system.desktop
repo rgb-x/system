@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=Shutdown RGBux
+Name[es]=Apagar RGBux
+Exec=sudo poweroff
+Type=Application
+Icon=system-log-out
+Terminal=false
+Categories=System;

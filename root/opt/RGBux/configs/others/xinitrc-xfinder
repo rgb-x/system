@@ -1,0 +1,5 @@
+export PATH=/usr/local/bin:/usr/games/bin:/opt/RGBux/bin:/usr/games:$PATH
+
+echo "xinit finder using: $TEST_PORT" >> /tmp/xinit.finder.log
+
+exec xterm -fg Snow1 -bg Grey20 -geom 106x37 -e "/opt/RGBux/bin/python/finder.py $TEST_PORT"

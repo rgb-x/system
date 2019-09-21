@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# este fichero lo deberian de usar al principio todos los launchers/scripts
+
+# vars, funcs in setup-env loaded on profile
+. /opt/RGBux/configs/base-system.conf
+
+### print log to /tmp
+#
+function print_log()
+{
+    echo "$1"
+    sudo echo "`logtime` : $1" >> $LOGFILE
+}
+
+function set_port_drm()
+{
+    local port_drm=$1
+    replace_value $CONNECTOR_DRM_NAME $port_drm $CFG_SYSTEM
+    # GRUB_CMDLINE_LINUX_DEFAULT="splash quiet vga=0x311 video=VGA-1:640x480ec"
+    replace_value "GRUB_CMDLINE_LINUX_DEFAULT" "\"splash quiet vga=0x311 video=${port_drm}:640x480ec\"" /etc/default/grub
+    # replace default grub value manually
+    sudo sed -i "s/splash quiet vga=0x311 video=\([\w\-\:]*\).*/\1vga=0x311 video=${port_drm}:640x480ec/g" /boot/grub/grub.cfg
+}
+
+function set_port_x11()
+{
+    local port_x11=$1
+    sudo cp -v "/opt/RGBux/configs/xorg/xorg_disabled.conf" /etc/X11/xorg.conf >> /tmp/xfinder.log
+    sudo sed -i "s/\"monitor-${TEST_PORT}\" \"Disabled\"/\"monitor-${TEST_PORT}\" \"CRT\"/" /etc/X11/xorg.conf
+    replace_mame connector $port_x11 /etc/mame/mame.ini
+    replace_value $CONNECTOR_X11_NAME $port_x11 $CFG_SYSTEM
+}
+
+# configure port
+function set_port()
+{
+    local port_x11=$1
+    local port_drm=$2
+    if [-z "$port_x11"]; then
+        # clean value
+        replace_value $CONNECTOR_X11_NAME "" $CFG_SYSTEM
+    else
+        set_port_x11 $port_x11
+    fi
+
+    set_port_drm $port_drm
+    print_log "$port_drm ($port_x11): OK, please restart."
+}

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# RGBux scripts on init
+run-parts /opt/RGBux/autostart
+
+exit 0

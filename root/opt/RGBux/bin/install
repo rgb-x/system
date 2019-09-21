@@ -1,0 +1,36 @@
+#!/bin/bash
+
+. /opt/RGBux/bin/system-base
+. /opt/RGBux/bin/rgbux-helpers
+
+function convert_raw() {
+    TMP="${1/#$VIDEO_PORT_PATH\/$VIDEO_CARD_NAME-/}"
+    TMP="${TMP/\:disconnected/}"
+    TMP="${TMP/\:connected/}"
+    export DRM_PT="${TMP/\/status/}"
+    echo $DRM_PT
+}
+
+
+echo $PORTS_DRM
+
+if [ "$IS31KHZ" = true ]; then
+
+    CONN=`grep . /sys/class/drm/*/status|sort|zenity --list --title="Select where do you want connect your CRT" --column="con"`
+    if [ "$CONN" = "" ]; then
+        zenity --info --text="Please selected one connector."
+        exit 1
+    fi
+    convert_raw "$CONN"
+    zenity --info --text="Selected: $DRM_PT"
+    if [ "$DRM_PT" = "" ]; then
+        zenity --info --text="Sorry unknown error..."
+        exit 2
+    fi
+
+    set_port_drm $DRM_PT
+    zenity --info --text="$DRM_PT configured OK!"
+
+fi
+
+exec /usr/lib/systemback/sbsustart systemback

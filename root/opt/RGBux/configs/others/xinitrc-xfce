@@ -1,0 +1,3 @@
+export PATH=/usr/local/bin:/usr/games/bin:/opt/RGBux/bin:/usr/games:$PATH
+# exec xterm -fg Snow1 -bg Grey20 -geom 106x37 -e "pyretro"
+exec startxfce4
