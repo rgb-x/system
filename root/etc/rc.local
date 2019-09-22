@@ -3,4 +3,7 @@
 # RGBux scripts on init
 run-parts /opt/RGBux/autostart
 
+# Force dhcp ip
+dhclient
+
 exit 0
