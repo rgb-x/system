@@ -56,10 +56,16 @@ if os.environ['ISLIVE'] == "true":
 
 show_info("This script is a Work In Progress...")
 pygame.time.delay(2000)
-exit(1)
+# We are in progress now
+# exit(1)
 
 show_info("Install KODI packages. About 100Mb will be used, Please Wait...")
-run_cmd("sudo apt-get -yq install --install-suggests kodi")
+# run_cmd("sudo apt-get -yq install --install-suggests kodi")
+# Use ppa for install Kodi, otherwise have an error
+run_cmd("sudo apt-get -yq install software-properties-common")
+run_cmd("sudo add-apt-repository -yq ppa:team-xbmc/ppa")
+run_cmd("sudo apt-get -yq update")
+run_cmd("sudo apt-get -yq install kodi")
 
 
 show_info("Clean cache...")
