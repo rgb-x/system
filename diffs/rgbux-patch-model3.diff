@@ -1,0 +1,267 @@
+diff --git a/Makefiles/Makefile.inc b/Makefiles/Makefile.inc
+index 4d48287..ee7d196 100644
+--- a/Makefiles/Makefile.inc
++++ b/Makefiles/Makefile.inc
+@@ -206,7 +206,7 @@ OUTFILE = supermodel
+ # Compiler Flags
+ ###############################################################################
+ 
+-ARCH = -march=native -mfpmath=sse
++ARCH = -march=core2 -mfpmath=sse
+ BUILD_CFLAGS =
+ OPT = -O3
+ WARN = -Wall
+diff --git a/Src/OSD/SDL/Main.cpp b/Src/OSD/SDL/Main.cpp
+index c098587..fcb8c7f 100644
+--- a/Src/OSD/SDL/Main.cpp
++++ b/Src/OSD/SDL/Main.cpp
+@@ -190,19 +190,24 @@ static bool CreateGLScreen(const std::string &caption, unsigned *xOffsetPtr, uns
+   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,8);
+   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,8);
+   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,24);
+-  SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE,8);
++  SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE,8);
+   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
+ 
+   // Set vsync
+   SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, s_runtime_config["VSync"].ValueAsDefault<bool>(false) ? 1 : 0);
+ 
+   // Set video mode
+-  if (SDL_SetVideoMode(*xResPtr,*yResPtr,0,SDL_OPENGL|(fullScreen?SDL_FULLSCREEN|SDL_HWSURFACE:0)) == NULL)
++  if (SDL_SetVideoMode(*xResPtr,*yResPtr,0,SDL_OPENGL|(fullScreen?SDL_NOFRAME|SDL_HWSURFACE:0)) == NULL)
+   {
+     ErrorLog("Unable to create an OpenGL display: %s\n", SDL_GetError());
+     return FAIL;
+   }
+     
++  //SDL_SetWindowResizable(fb.window, SDL_FALSE);
++  //SDL_SetWindowBordered(fb.window, SDL_FALSE);
++  //SDL_SetWindowPosition(fb.window, 0, 0);
++  //SDL_SetWindowSize(fb.window, sdl_get_display_dim(0).x, sdl_get_display_dim(0).y)
++
+   // Create window caption
+   SDL_WM_SetCaption(caption.c_str(),NULL);
+     
+@@ -237,7 +242,7 @@ static bool ResizeGLScreen(unsigned *xOffsetPtr, unsigned *yOffsetPtr, unsigned
+  */
+ static void PrintGLInfo(bool createScreen, bool infoLog, bool printExtensions)
+ {
+-  unsigned xOffset, yOffset, xRes=496, yRes=384, totalXRes, totalYRes;  
++  unsigned xOffset, yOffset, xRes=312, yRes=240, totalXRes, totalYRes;
+   if (createScreen)
+   {
+     if (OKAY != CreateGLScreen("Supermodel - Querying OpenGL Information...", &xOffset, &yOffset, &xRes, &yRes, &totalXRes, &totalYRes, false, false))
+@@ -687,91 +692,91 @@ static void PrintGLError(GLenum error)
+   case GL_NO_ERROR:           break;
+   default:                    printf("unknown error\n"); break;
+   }
+-}
+-*/
+-
+-static void UpdateCrosshairs(uint32_t currentInputs, CInputs *Inputs, unsigned crosshairs)
+-
+-{
+-  bool offscreenTrigger[2];
+-  float x[2], y[2];
+-
+-  crosshairs &= 3;
+-  if (!crosshairs)
+-    return;
+-
+-  // Set up the viewport and orthogonal projection
+-  glUseProgram(0);    // no shaders
+-  glViewport(xOffset, yOffset, xRes, yRes);
++}
++*/
++
++static void UpdateCrosshairs(uint32_t currentInputs, CInputs *Inputs, unsigned crosshairs)
++
++{
++  bool offscreenTrigger[2];
++  float x[2], y[2];
++
++  crosshairs &= 3;
++  if (!crosshairs)
++    return;
++
++  // Set up the viewport and orthogonal projection
++  glUseProgram(0);    // no shaders
++  glViewport(xOffset, yOffset, xRes, yRes);
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   gluOrtho2D(0.0, 1.0, 1.0, 0.0);
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+   glDisable(GL_TEXTURE_2D); // no texture mapping
+-  glDisable(GL_BLEND);    // no blending
+-  glDisable(GL_DEPTH_TEST); // no Z-buffering needed  
+-  glDisable(GL_LIGHTING);
+-
+-  // Convert gun coordinates to viewspace coordinates
+-  if (currentInputs & Game::INPUT_ANALOG_GUN1)
+-  {
+-    x[0] = ((float)Inputs->analogGunX[0]->value / 255.0f);
+-    y[0] = ((255.0f - (float)Inputs->analogGunY[0]->value) / 255.0f);
+-    offscreenTrigger[0] = Inputs->analogTriggerLeft[0]->value || Inputs->analogTriggerRight[0]->value;
+-  }
+-  else if (currentInputs & Game::INPUT_GUN1)
+-  {
+-    x[0] = (float)Inputs->gunX[0]->value;
+-    y[0] = (float)Inputs->gunY[0]->value;
+-    GunToViewCoords(&x[0], &y[0]);
+-	offscreenTrigger[0] = (Inputs->trigger[0]->offscreenValue) > 0;
+-  }
+-  if (currentInputs & Game::INPUT_ANALOG_GUN2)
+-  {
+-    x[1] = ((float)Inputs->analogGunX[1]->value / 255.0f);
+-    y[1] = ((255.0f - (float)Inputs->analogGunY[1]->value) / 255.0f);
+-    offscreenTrigger[1] = Inputs->analogTriggerLeft[1]->value || Inputs->analogTriggerRight[1]->value;
+-  }
+-  else if (currentInputs & Game::INPUT_GUN2)
+-  {
+-    x[1] = (float)Inputs->gunX[1]->value;
+-    y[1] = (float)Inputs->gunY[1]->value;
+-    GunToViewCoords(&x[1], &y[1]);
+-	offscreenTrigger[1] = (Inputs->trigger[1]->offscreenValue) > 0;
+-  }
+-  // Draw visible crosshairs  
+-  glBegin(GL_TRIANGLES);
+-  if ((crosshairs & 1) && !offscreenTrigger[0])  // Player 1
+-    DrawCrosshair(x[0], y[0], 1.0f, 0.0f, 0.0f);
+-  if ((crosshairs & 2) && !offscreenTrigger[1])  // Player 2
+-    DrawCrosshair(x[1], y[1], 0.0f, 1.0f, 0.0f);
+-  glEnd();
+-
+-  //PrintGLError(glGetError());
+-}
+-
++  glDisable(GL_BLEND);    // no blending
++  glDisable(GL_DEPTH_TEST); // no Z-buffering needed  
++  glDisable(GL_LIGHTING);
++
++  // Convert gun coordinates to viewspace coordinates
++  if (currentInputs & Game::INPUT_ANALOG_GUN1)
++  {
++    x[0] = ((float)Inputs->analogGunX[0]->value / 255.0f);
++    y[0] = ((255.0f - (float)Inputs->analogGunY[0]->value) / 255.0f);
++    offscreenTrigger[0] = Inputs->analogTriggerLeft[0]->value || Inputs->analogTriggerRight[0]->value;
++  }
++  else if (currentInputs & Game::INPUT_GUN1)
++  {
++    x[0] = (float)Inputs->gunX[0]->value;
++    y[0] = (float)Inputs->gunY[0]->value;
++    GunToViewCoords(&x[0], &y[0]);
++	offscreenTrigger[0] = (Inputs->trigger[0]->offscreenValue) > 0;
++  }
++  if (currentInputs & Game::INPUT_ANALOG_GUN2)
++  {
++    x[1] = ((float)Inputs->analogGunX[1]->value / 255.0f);
++    y[1] = ((255.0f - (float)Inputs->analogGunY[1]->value) / 255.0f);
++    offscreenTrigger[1] = Inputs->analogTriggerLeft[1]->value || Inputs->analogTriggerRight[1]->value;
++  }
++  else if (currentInputs & Game::INPUT_GUN2)
++  {
++    x[1] = (float)Inputs->gunX[1]->value;
++    y[1] = (float)Inputs->gunY[1]->value;
++    GunToViewCoords(&x[1], &y[1]);
++	offscreenTrigger[1] = (Inputs->trigger[1]->offscreenValue) > 0;
++  }
++  // Draw visible crosshairs  
++  glBegin(GL_TRIANGLES);
++  if ((crosshairs & 1) && !offscreenTrigger[0])  // Player 1
++    DrawCrosshair(x[0], y[0], 1.0f, 0.0f, 0.0f);
++  if ((crosshairs & 2) && !offscreenTrigger[1])  // Player 2
++    DrawCrosshair(x[1], y[1], 0.0f, 1.0f, 0.0f);
++  glEnd();
++
++  //PrintGLError(glGetError());
++}
++
+   
+ /******************************************************************************
+  Video Callbacks
+-******************************************************************************/
+-
+-static CInputs *videoInputs = NULL;
+-static uint32_t currentInputs = 0;
+-
+-bool BeginFrameVideo()
+-{
++******************************************************************************/
++
++static CInputs *videoInputs = NULL;
++static uint32_t currentInputs = 0;
++
++bool BeginFrameVideo()
++{
+   return true;
+ }
+ 
+ void EndFrameVideo()
+-{
+-  // Show crosshairs for light gun games
+-  if (videoInputs)
+-    UpdateCrosshairs(currentInputs, videoInputs, s_runtime_config["Crosshairs"].ValueAs<unsigned>());
+-
+-  // Swap the buffers
+-  SDL_GL_SwapBuffers();
++{
++  // Show crosshairs for light gun games
++  if (videoInputs)
++    UpdateCrosshairs(currentInputs, videoInputs, s_runtime_config["Crosshairs"].ValueAs<unsigned>());
++
++  // Swap the buffers
++  SDL_GL_SwapBuffers();
+ }
+ 
+ static void SuperSleep(UINT32 time)
+@@ -832,14 +837,14 @@ int Supermodel(const Game &game, ROMSet *rom_set, IEmulator *Model3, CInputs *In
+   if (OKAY != OpenAudio())
+     return 1;
+ 
+-  // Hide mouse if fullscreen, enable crosshairs for gun games
+-  Inputs->GetInputSystem()->SetMouseVisibility(!s_runtime_config["FullScreen"].ValueAs<bool>());
+-  gameHasLightguns = !!(game.inputs & (Game::INPUT_GUN1|Game::INPUT_GUN2));
+-  gameHasLightguns |= game.name == "lostwsga";
+-  currentInputs = game.inputs;
+-  if (gameHasLightguns)
+-    videoInputs = Inputs;
+-  else
++  // Hide mouse if fullscreen, enable crosshairs for gun games
++  Inputs->GetInputSystem()->SetMouseVisibility(!s_runtime_config["FullScreen"].ValueAs<bool>());
++  gameHasLightguns = !!(game.inputs & (Game::INPUT_GUN1|Game::INPUT_GUN2));
++  gameHasLightguns |= game.name == "lostwsga";
++  currentInputs = game.inputs;
++  if (gameHasLightguns)
++    videoInputs = Inputs;
++  else
+     videoInputs = NULL;
+ 
+   // Attach the inputs to the emulator
+@@ -1293,16 +1298,16 @@ static void PrintGameList(const std::string &xml_file, const std::map<std::strin
+   for (auto &v: games)
+   {
+     const Game &game = v.second;
+-    printf("    %s", game.name.c_str());
+-    for (int i = game.name.length(); i < 9; i++)  // pad for alignment (no game ID should be more than 9 letters)
+-      printf(" ");
+-    if (!game.version.empty())
+-      printf("       %s (%s)\n", game.title.c_str(), game.version.c_str());
+-    else
+-      printf("       %s\n", game.title.c_str());
+-  }
+-}
+-
++    printf("    %s", game.name.c_str());
++    for (int i = game.name.length(); i < 9; i++)  // pad for alignment (no game ID should be more than 9 letters)
++      printf(" ");
++    if (!game.version.empty())
++      printf("       %s (%s)\n", game.title.c_str(), game.version.c_str());
++    else
++      printf("       %s\n", game.title.c_str());
++  }
++}
++
+ static void LogConfig(const Util::Config::Node &config)
+ {
+   InfoLog("Runtime configuration:");

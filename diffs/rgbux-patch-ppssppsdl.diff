@@ -1,0 +1,19 @@
+diff --git a/UI/EmuScreen.cpp b/UI/EmuScreen.cpp
+index d3fd56050..c81200ff7 100644
+--- a/UI/EmuScreen.cpp
++++ b/UI/EmuScreen.cpp
+@@ -557,6 +557,14 @@ void EmuScreen::onVKeyDown(int virtualKeyCode) {
+ 			UI::EventParams e{};
+ 			OnChatMenu.Trigger(e);
+ 		}
++		/* SKY MOD - RGBux */
++		printf("Exit PPSSPP using RGBux mod\n");
++		pauseTrigger_ = true;
++		System_SendMessage("event", "exitprogram");
++		// Request the framework to exit cleanly.
++		System_SendMessage("finish", "");
++		g_Config.Save("MainScreen::OnExit");
++		UpdateUIState(UISTATE_EXIT);
+ 		break;
+ 
+ 	case VIRTKEY_AXIS_SWAP:

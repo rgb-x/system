@@ -1,0 +1,296 @@
+diff --git a/debian/changelog b/debian/changelog
+index 09efa2d..aa9259e 100644
+--- a/debian/changelog
++++ b/debian/changelog
+@@ -1,3 +1,9 @@
++retroarch (1.8.7-r202005180342-f1158b9-105~ubuntu18.04.2) UNRELEASED; urgency=medium
++
++  * rgbux patches
++
++ -- David Colmenero <david@dagoba>  Tue, 19 May 2020 13:21:10 +0200
++
+ retroarch (1.8.7-r202005180342-f1158b9-105~ubuntu18.04.1) bionic; urgency=low
+ 
+   * Auto build.
+diff --git a/gfx/display_servers/dispserv_x11.c b/gfx/display_servers/dispserv_x11.c
+index 7fbfc15..a29ed51 100644
+--- a/gfx/display_servers/dispserv_x11.c
++++ b/gfx/display_servers/dispserv_x11.c
+@@ -48,6 +48,7 @@ static unsigned crt_id          = 20;
+ static char orig_output[256]    = {0};
+ static char old_mode[256]       = {0};
+ static char new_mode[256]       = {0};
++static char crt_debug_output[800] = {0};
+ static XRRModeInfo crt_rrmode;
+ #endif
+ 
+@@ -104,6 +105,7 @@ static void x11_display_server_destroy(void *data)
+ #ifdef HAVE_XRANDR
+    if (crt_en)
+    {
++      /*
+       snprintf(xrandr, sizeof(xrandr),
+             "xrandr --newmode 700x480_59.94 13.849698 700 742 801 867 480 490 496 533 interlace -hsync -vsync");
+       system(xrandr);
+@@ -111,8 +113,9 @@ static void x11_display_server_destroy(void *data)
+             "xrandr --addmode \"%s\" 700x480_59.94",
+             orig_output);
+       system(xrandr);
++      */
+       snprintf(xrandr, sizeof(xrandr),
+-            "xrandr --output \"%s\" --mode 700x480_59.94",
++            "xrandr --output \"%s\" --mode 15Khz_desktop",
+             orig_output);
+       system(xrandr);
+       snprintf(xrandr, sizeof(xrandr),
+@@ -347,6 +350,25 @@ static bool x11_display_server_set_resolution(void *data,
+          system(xrandr);
+       }
+    }
++
++   if (true)
++   {
++	  snprintf(crt_debug_output, sizeof(crt_debug_output),
++	  "\n\n************ CRTSwitchRes Debug output ************\n"
++	  "                                             \n"
++      "    CRT Resolution: %dx%d                     \n"
++      "    Refresh Rate: %lf                         \n"
++      "    Horizontal Porches:                       \n"
++      "    - Front: %d | Sync: %d | Back: %d         \n"
++      "    Vertical Porches:                         \n"
++      "    - Front: %d | Sync: %d | Back: %d         \n"
++      "                                              \n"
++      "***************************************************\n\n"
++	  , width, height, hz, hfp, hsp, hbp, vfp, vsp, vbp);
++	  
++	  printf("%s",crt_debug_output);
++   }
++
+    return true;
+ }
+ #endif
+diff --git a/retroarch.c b/retroarch.c
+index 5543bd9..0008803 100644
+--- a/retroarch.c
++++ b/retroarch.c
+@@ -1693,16 +1693,28 @@ static void path_set_redirect(void)
+       }
+    }
+ 
++   if (retroarch_override_setting_is_set(RARCH_OVERRIDE_SETTING_SAVE_PATH, NULL))
++   {
++      strlcpy(new_savefile_dir, global->name.savefile,
++            path_size);
++      path_basedir(new_savefile_dir);
++   }
+    /* Set savefile directory if empty to content directory */
+-   if (string_is_empty(new_savefile_dir) || savefiles_in_content_dir)
++   else if (string_is_empty(new_savefile_dir) || savefiles_in_content_dir)
+    {
+       strlcpy(new_savefile_dir, path_main_basename,
+             path_size);
+       path_basedir(new_savefile_dir);
+    }
+ 
++   if (retroarch_override_setting_is_set(RARCH_OVERRIDE_SETTING_STATE_PATH, NULL))
++   {
++      strlcpy(new_savestate_dir, global->name.savestate,
++            path_size);
++      path_basedir(new_savestate_dir);
++   }
+    /* Set savestate directory if empty based on content directory */
+-   if (string_is_empty(new_savestate_dir) || savestates_in_content_dir)
++   else if (string_is_empty(new_savestate_dir) || savestates_in_content_dir)
+    {
+       strlcpy(new_savestate_dir, path_main_basename,
+             path_size);
+diff --git a/gfx/display_servers/dispserv_x11.c b/gfx/display_servers/dispserv_x11.c
+index a29ed51..7be7ae0 100644
+--- a/gfx/display_servers/dispserv_x11.c
++++ b/gfx/display_servers/dispserv_x11.c
+@@ -48,6 +48,7 @@ static unsigned crt_id          = 20;
+ static char orig_output[256]    = {0};
+ static char old_mode[256]       = {0};
+ static char new_mode[256]       = {0};
++static char crt_debug_output[800] = {0};
+ static XRRModeInfo crt_rrmode;
+ #endif
+ 
+@@ -86,6 +86,12 @@ static void x11_display_server_close_display(Display *dpy)
+ 
+    XCloseDisplay(dpy);
+ }
++
++static void x11_sendcmd(char * cmd)
++{
++   //printf("cmd: %s\n", cmd);
++   system(cmd);
++}
+ #endif
+ 
+ static void* x11_display_server_init(void)
+@@ -117,15 +123,15 @@ static void x11_display_server_destroy(void *data)
+       snprintf(xrandr, sizeof(xrandr),
+             "xrandr --output \"%s\" --mode 15Khz_desktop",
+             orig_output);
+-      system(xrandr);
++      x11_sendcmd(xrandr);
+       snprintf(xrandr, sizeof(xrandr),
+             "xrandr --delmode \"%s\" \"%s\"",
+-            orig_output, old_mode);
+-      system(xrandr);
++            orig_output, new_mode);
++      x11_sendcmd(xrandr);
+       snprintf(xrandr, sizeof(xrandr),
+             "xrandr --rmmode \"%s\"",
+-            old_mode);
+-      system(xrandr);
++            new_mode);
++      x11_sendcmd(xrandr);
+    }
+ #endif
+ 
+@@ -191,7 +197,9 @@ static bool x11_display_server_set_resolution(void *data,
+    crt_en = true;
+    crt_name_id += 1;
+    snprintf(crt_name, sizeof(crt_name), "CRT%d", crt_name_id);
+-   snprintf(old_mode, sizeof(old_mode), "%s", new_mode);
++
++   if(strnlen(new_mode, sizeof(new_mode)))
++      snprintf(old_mode, sizeof(old_mode), "%s", new_mode);
+ 
+    dpy = XOpenDisplay(0);
+    screen = DefaultScreen(dpy);
+@@ -255,26 +263,14 @@ static bool x11_display_server_set_resolution(void *data,
+       pixel_clock = ((hmax * vmax * hz) / 1000000) / 2;
+    /* above code is the modeline generator */
+ 
+-   /* create interlaced newmode from modline variables */
+-   if (height < 300)
+-   {
+-      snprintf(xrandr, sizeof(xrandr),
+-            "xrandr --newmode \"%s_%dx%d_%0.2f\" %f %d %d %d %d %d %d %d %d -hsync -vsync",
+-            crt_name, width, height, hz, pixel_clock, width, hfp, hsp, hbp, height, vfp, vsp, vbp);
+-      system(xrandr);
+-   }
+-
+-   /* create interlaced newmode from modline variables */
+-   if (height > 300)
+-   {
+-      snprintf(xrandr, sizeof(xrandr),
+-            "xrandr --newmode \"%s_%dx%d_%0.2f\" %f %d %d %d %d %d %d %d %d interlace -hsync -vsync",
+-            crt_name, width, height, hz, pixel_clock, width, hfp, hsp, hbp, height, vfp, vsp, vbp);
+-      system(xrandr);
+-   }
+-
+    /* variable for new mode */
+    snprintf(new_mode, sizeof(new_mode), "%s_%dx%d_%0.2f", crt_name, width, height, hz);
++   snprintf(xrandr, sizeof(xrandr),
++         "xrandr --newmode \"%s\" %f %d %d %d %d %d %d %d %d %s -hsync -vsync",
++         new_mode, pixel_clock, width, hfp, hsp, hbp, height, vfp, vsp, vbp,
++         height > 300 ? "interlace": ""
++   );
++   x11_sendcmd(xrandr);
+ 
+    /* need to run loops for DVI0 - DVI-2 and VGA0 - VGA-2 outputs to
+     * add and delete modes */
+@@ -308,19 +304,23 @@ static bool x11_display_server_set_resolution(void *data,
+             snprintf(xrandr, sizeof(xrandr),
+                   "xrandr --addmode \"%s\" \"%s\"",
+                   outputs->name, new_mode);
+-            system(xrandr);
++            x11_sendcmd(xrandr);
+             snprintf(xrandr, sizeof(xrandr),
+                   "xrandr --output \"%s\" --mode \"%s\"",
+                   outputs->name, new_mode);
+-            system(xrandr);
+-            snprintf(xrandr, sizeof(xrandr),
+-                  "xrandr --delmode \"%s\" \"%s\"",
+-                  outputs->name, old_mode);
+-            system(xrandr);
+-            snprintf(xrandr, sizeof(xrandr),
+-                  "xrandr --rmmode \"%s\"",
+-                  old_mode);
+-            system(xrandr);
++            x11_sendcmd(xrandr);
++
++            if (strnlen(old_mode, sizeof(old_mode)))
++            {
++               snprintf(xrandr, sizeof(xrandr),
++                     "xrandr --delmode \"%s\" \"%s\"",
++                     outputs->name, old_mode);
++               x11_sendcmd(xrandr);
++               snprintf(xrandr, sizeof(xrandr),
++                     "xrandr --rmmode \"%s\"",
++                     old_mode);
++               x11_sendcmd(xrandr);
++            }
+          }
+       }
+    }
+@@ -335,38 +335,42 @@ static bool x11_display_server_set_resolution(void *data,
+          snprintf(xrandr, sizeof(xrandr),
+                "xrandr --addmode \"%s\" \"%s\"",
+                outputs->name, new_mode);
+-         system(xrandr);
++         x11_sendcmd(xrandr);
+          snprintf(xrandr, sizeof(xrandr),
+                "xrandr --output \"%s\" --mode \"%s\"",
+                outputs->name, new_mode);
+-         system(xrandr);
+-         snprintf(xrandr, sizeof(xrandr),
+-               "xrandr --delmode \"%s\" \"%s\"",
+-               outputs->name, old_mode);
+-         system(xrandr);
+-         snprintf(xrandr, sizeof(xrandr),
+-               "xrandr --rmmode \"%s\"",
+-               old_mode);
+-         system(xrandr);
++         x11_sendcmd(xrandr);
++
++         if (strnlen(old_mode, sizeof(old_mode)))
++         {
++            snprintf(xrandr, sizeof(xrandr),
++                  "xrandr --delmode \"%s\" \"%s\"",
++                  outputs->name, old_mode);
++            x11_sendcmd(xrandr);
++            snprintf(xrandr, sizeof(xrandr),
++                  "xrandr --rmmode \"%s\"",
++                  old_mode);
++            x11_sendcmd(xrandr);
++         }
+       }
+    }
+ 
+    if (true)
+    {
+-	  snprintf(crt_debug_output, sizeof(crt_debug_output),
+-	  "\n\n************ CRTSwitchRes Debug output ************\n"
+-	  "                                             \n"
+-      "    CRT Resolution: %dx%d                     \n"
+-      "    Refresh Rate: %lf                         \n"
+-      "    Horizontal Porches:                       \n"
+-      "    - Front: %d | Sync: %d | Back: %d         \n"
+-      "    Vertical Porches:                         \n"
+-      "    - Front: %d | Sync: %d | Back: %d         \n"
+-      "                                              \n"
++      snprintf(crt_debug_output, sizeof(crt_debug_output),
++      "\n\n************ CRTSwitchRes Debug output ************\n"
++      "                                               \n"
++      "    CRT Resolution: %dx%d                      \n"
++      "    Xrandr Name: %s                            \n"
++      "    Refresh Rate: %lf                          \n"
++      "    Horizontal Porches:                        \n"
++      "    - Front: %d | Sync: %d | Back: %d          \n"
++      "    Vertical Porches:                          \n"
++      "    - Front: %d | Sync: %d | Back: %d          \n"
++      "                                               \n"
+       "***************************************************\n\n"
+-	  , width, height, hz, hfp, hsp, hbp, vfp, vsp, vbp);
+-	  
+-	  printf("%s",crt_debug_output);
++      , width, height, new_mode, hz, hfp, hsp, hbp, vfp, vsp, vbp);
++      printf("%s",crt_debug_output);
+    }
+ 
+    return true;
